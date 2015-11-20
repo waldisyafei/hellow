@@ -19,6 +19,7 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/ionChatty/www/index.html');
 });
 
+
 http.listen(3333, function(){
   console.log('WebServer listening on *:3333');
 });
