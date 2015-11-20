@@ -1,0 +1,36 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Register</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">Username</span>
+        <input type="text" ng-model="username">
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">Password</span>
+        <input type="password" ng-model="password">
+        <!--<span class="strength" ng:class="strength">This password is {{strength}}-->
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">E-Mail</span>
+        <input type="text" ng-model="email">
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">Handphone Number</span>
+        <input type="text" ng-model="hp">
+      </label>
+    </div>
+    <div class="padding">
+      <button class="button button-block button-positive" ng-click="registration(username,password,email,hp)">Process</button>
+      <button class="button button-block button-positive" ng-click="registerback()">Back</button>
+    </div>
+  </ion-content>
+</ion-modal-view>

@@ -1,0 +1,25 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Login</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">Username</span>
+        <input type="text" ng-model="username">
+      </label>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <span class="input-label">Password</span>
+        <input type="password" ng-model="password">
+      </label>
+    </div>
+    <div class="padding">
+      <button class="button button-block button-positive" ng-click="sendLogin(username)">Login</button>
+    </div>
+    <div class="padding">
+      <button class="button button-block button-positive" ng-click="viewRegister()">Register</button>
+    </div>
+  </ion-content>
+</ion-modal-view>
