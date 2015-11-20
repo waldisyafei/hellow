@@ -7,7 +7,7 @@
   <author email="waldi.syafei@gmail.com" href="http://infocomputer.org/">
       Ionic Framework Team
     </author>
-  <content src="http://infocomputer.org:3333"/>
+  <content src="http://localhost:3333"/>
   <access origin="*"/>
   <allow-navigation href="http://omapp.my/*" />
   <allow-intent href="*" />
