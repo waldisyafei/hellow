@@ -1,7 +1,7 @@
 <ion-view view-title="Users">
   <ion-content>
     <ion-list>
-      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles(userid(),users)=='admin'">
+      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles(userid(),users)=='admin' && user.role=='user'">
         <div>
           {{user.Name}} ({{user.contact}})
           <div ng-if="isMe(user.Id)">(me)</div>
