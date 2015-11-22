@@ -6,6 +6,7 @@ var http = require('http').Server(app);
 var users = [];
 var userSockets = {};
 var db = require('./database.js');
+var md5 = require('md5');
 
 app.use(express.static(__dirname + '/ionChatty/www/'));
 app.use(function(req, res, next) {
@@ -23,34 +24,51 @@ http.listen(3333, function(){
   console.log('WebServer listening on *:3333');
 });
 
-//var io = socket.listen(3333)
-
 var io = require('socket.io').listen(http);
 
 io.on('connection', function(client){
   console.log('User Connected -> ' + client.id);
 
-  client.on("login", function(name){
+  client.on("login", function(email, password){
     var user = {};
-    user.Name = name;
+    //user.Name = email;
     user.Id = client.id;
 
-    userSockets[client.id] = client;
-    users.push(user);
-    io.sockets.emit("update", users);
+    var query = "select count(role)hitung, role, contact, name from users where email=? and password=?";
+    var params = [email, md5(password)];
+    
+    db.exec(query, params, function(err, results) {
+      if (results[0].hitung) { // If unexpected error then send 500
+        user.role = results[0].role;
+        user.contact = results[0].contact;
+        user.Name = results[0].name;
+
+        userSockets[client.id] = client;
+        users.push(user);
+
+        //userSockets[client.id].emit("login", true, users);
+        io.sockets.emit("login", true, users);
+
+      } else {
+        userSockets[client.id] = client;
+        users.push(user);
+
+        userSockets[client.id].emit("login", false);
+        //userSockets[client.id].emit("login", err);
+      }
+    });
   });
 
-  client.on("register", function(username, password, email, hp){
-    var query = "INSERT INTO ??(??,??,??,??,??) VALUES (?,?,?,?,?)";
+  client.on("register", function(email, password, name, contact){
+    var query = "INSERT INTO users (email, password, name, contact, dateCreated, role) VALUES (?,?,?,?,?,?)";
     var now = new Date();
-    var params = ["users", "username", "password", "email", "NoHP", "dateCreated", username, password, email, hp, now];
+    var params = [email, md5(password), name, contact, now, 'user'];
     
-    db.exec(query, params, function(err, results,test) {
-      console.log(test);
+    db.exec(query, params, function(err, results) {
       if (err) { // If unexpected error then send 500
         io.sockets.emit("notification", err);
       } else {
-        io.sockets.emit("notification", err);
+        userSockets[client.id].emit("notification", err);
       }
     });
   });

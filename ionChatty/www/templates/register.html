@@ -3,34 +3,54 @@
     <h1 class="title">Register</h1>
   </ion-header-bar>
   <ion-content>
-    <div class="list list-inset">
-      <label class="item item-input">
-        <span class="input-label">Username</span>
-        <input type="text" ng-model="username">
-      </label>
-    </div>
-    <div class="list list-inset">
-      <label class="item item-input">
-        <span class="input-label">Password</span>
-        <input type="password" ng-model="password">
-        <!--<span class="strength" ng:class="strength">This password is {{strength}}-->
-      </label>
-    </div>
-    <div class="list list-inset">
-      <label class="item item-input">
-        <span class="input-label">E-Mail</span>
-        <input type="text" ng-model="email">
-      </label>
-    </div>
-    <div class="list list-inset">
-      <label class="item item-input">
-        <span class="input-label">Handphone Number</span>
-        <input type="text" ng-model="hp">
-      </label>
-    </div>
-    <div class="padding">
-      <button class="button button-block button-positive" ng-click="registration(username,password,email,hp)">Process</button>
-      <button class="button button-block button-positive" ng-click="registerback()">Back</button>
-    </div>
+    <form name="registerform" novalidate="" ng-submit="registration(registerform,input)">
+      <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">E-Mail</span>
+          <input type="email" name="email" ng-model="input.email" required>
+        </label>
+      </div>
+      <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input type="password" name="password" ng-model="input.password" ng-minlength="6" ng-maxlength="30" pattern="^(?=.*\d)(?=.*[a-zA-Z])(?!.*[\W_\x7B-\xFF]).{6,30}$" required>
+        </label>
+      </div>
+      <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">Your Name</span>
+          <input type="text" name="name" ng-model="input.name" ng-minlength="3" ng-maxlength="100" required>
+        </label>
+      </div>
+      <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">Contact Number</span>
+          <input type="text" name="contact" ng-model="input.contact" ng-minlength="5" ng-maxlength="100" required>
+        </label>
+      </div>
+      <div class="padding">
+        <p ng-show="registerform.email.$error.required && registerform.$submitted">* Email is required</p>
+        <p ng-show="registerform.email.$invalid && registerform.$submitted">* Email invalid</p>
+
+        <p ng-show="registerform.password.$error.required && registerform.$submitted">* Password is required</p>
+        <p ng-show="registerform.password.$invalid && registerform.$submitted">* Password Requires 6-30 characters including at least 1 upper or lower alpha, and 1 digit. It should disallow just about everything else, inluding extended characters</p>
+
+        <p ng-show="registerform.name.$error.required && registerform.$submitted">* Name is required</p>
+        <p ng-show="registerform.contact.$error.required && registerform.$submitted">* Contact is required</p>
+
+        <p ng-show="registerform.password.$error.minlength">* Password must be longer than 6 characters</p>
+        <p ng-show="registerform.name.$error.minlength">* Name must be longer than 3 characters</p>
+        <p ng-show="registerform.contact.$error.minlength">* Contact must be longer than 5 characters</p>
+
+        <p ng-show="registerform.password.$error.maxlength">* Password cannot be longer than 30 characters</p>
+        <p ng-show="registerform.name.$error.maxlength">* Name cannot be longer than 100 characters</p>
+        <p ng-show="registerform.contact.$error.maxlength">* Contact cannot be longer than 100 characters</p>
+      </div>
+      <div class="padding">
+        <!--<button class="button button-block button-positive" ng-click="registration(username,password,email,hp)">Process</button>-->
+        <button class="button button-block button-positive" type="submit">Process</button>  
+      </div>
+    </form>
+    <button class="button button-block button-positive" ng-click="registerback()">Back</button>
   </ion-content>
 </ion-modal-view>

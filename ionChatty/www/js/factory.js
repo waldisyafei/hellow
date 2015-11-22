@@ -10,7 +10,13 @@ app.service('ioFactory', function ($rootScope) {
 
   socket.on("notification", function(msg){
       notif = msg;
-      $rootScope.$broadcast('overview.notification');
+      $rootScope.$broadcast('register.notification');
+  });
+
+  socket.on("login", function(msg, user){
+      notif = msg;
+      Users = user;
+      $rootScope.$broadcast('login.notification');
   });
 
   socket.on("incomming", function(fromUser, message){
@@ -19,6 +25,7 @@ app.service('ioFactory', function ($rootScope) {
         "text": message,
         "isRead": false
       };
+
       messages[fromUser].push(mess);
       $rootScope.$broadcast('messages.update');
   });
@@ -30,13 +37,15 @@ app.service('ioFactory', function ($rootScope) {
       UserId: function(){
         return socket.io.engine.id;
       },
-      login: function(username){
-        socket.emit("login", username);
+      login: function(username,password){
+        socket.emit("login", username, password);
       },
-      register: function(username,password,email,hp){
-        socket.emit("register", username, password, email, hp);
+      register: function(email,password,name,contact){
+        socket.emit("register", email, password, name, contact);
       },
       messages: function(partnerId){
+        console.log(partnerId);
+
         if(messages[partnerId] == undefined){
           messages[partnerId] = [];
         }

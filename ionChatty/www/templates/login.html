@@ -3,23 +3,33 @@
     <h1 class="title">Login</h1>
   </ion-header-bar>
   <ion-content>
-    <div class="list list-inset">
-      <label class="item item-input">
-        <span class="input-label">Username</span>
-        <input type="text" ng-model="username">
-      </label>
-    </div>
-    <div class="list list-inset">
-      <label class="item item-input">
-        <span class="input-label">Password</span>
-        <input type="password" ng-model="password">
-      </label>
-    </div>
+    <form name="loginform" novalidate="" ng-submit="sendLogin(loginform,input)">
+      <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">Email</span>
+          <input type="email" name="username" ng-model="input.username" required>
+        </label>
+      </div>
+      <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input type="password" name="password" ng-model="input.password" pattern="^(?=.*\d)(?=.*[a-zA-Z])(?!.*[\W_\x7B-\xFF]).{6,30}$" required>
+        </label>
+      </div>
+      <div class="padding">
+        <p ng-show="loginform.username.$error.required && loginform.$submitted">* Email is required</p>
+        <p ng-show="loginform.username.$invalid && loginform.$submitted">* Email invalid</p>
+
+        <p ng-show="loginform.password.$error.required && loginform.$submitted">* Password is required</p>
+        <p ng-show="loginform.password.$invalid && loginform.$submitted">* Password Requires 6-30 characters including at least 1 upper or lower alpha, and 1 digit. It should disallow just about everything else, inluding extended characters</p>
+      </div>
+      <div class="padding">
+        <button class="button button-block button-positive" type="submit">Login</button>
+      </div>
+    </form>
+    
     <div class="padding">
-      <button class="button button-block button-positive" ng-click="sendLogin(username)">Login</button>
-    </div>
-    <div class="padding">
-      <button class="button button-block button-positive" ng-click="viewRegister()">Register</button>
+      <button class="button button-block button-positive" type="button" ng-click="viewRegister()">Register</button>
     </div>
   </ion-content>
 </ion-modal-view>

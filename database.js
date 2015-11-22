@@ -25,7 +25,7 @@ exports.exec = function (sql, data, callback) {
 			connection.release();
 			if (err) {
 				console.log(err);
-				callback(true);
+				callback(true, err);
 				return;
 			}
 			callback(false, results);

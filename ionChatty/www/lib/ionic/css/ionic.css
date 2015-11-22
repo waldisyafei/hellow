@@ -3978,7 +3978,7 @@ ion-tabs.tabs-color-active-dark .tab-item {
     bottom: 20%;
     left: 20%;
     overflow: visible;
-    min-height: 500px;
+    min-height: 550px;
     width: 60%; }
   .modal.ng-leave-active {
     bottom: 0; }

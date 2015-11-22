@@ -1,13 +1,20 @@
 <ion-view view-title="Users">
   <ion-content>
     <ion-list>
-      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users">
+      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles(userid(),users)=='admin'">
         <div>
-          {{user.Name}}
+          {{user.Name}} ({{user.contact}})
           <div ng-if="isMe(user.Id)">(me)</div>
           <span ng-if="!isMe(user.Id) && getUndreadedMessages(user.Id) > 0" class="badge badge-positive">{{ getUndreadedMessages(user.Id) }}</span>
         </div>
-    </ion-list>
       </ion-item>
+      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles(userid(),users)=='user' && user.role=='admin'">
+        <div>
+          {{user.Name}} ({{user.contact}})
+          <div ng-if="isMe(user.Id)">(me)</div>
+          <span ng-if="!isMe(user.Id) && getUndreadedMessages(user.Id) > 0" class="badge badge-positive">{{ getUndreadedMessages(user.Id) }}</span>
+        </div>
+      </ion-item>
+    </ion-list>
   </ion-content>
 </ion-view>
