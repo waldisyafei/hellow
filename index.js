@@ -63,10 +63,13 @@ io.on('connection', function(client){
     var query = "INSERT INTO users (email, password, name, contact, dateCreated, role) VALUES (?,?,?,?,?,?)";
     var now = new Date();
     var params = [email, md5(password), name, contact, now, 'user'];
+
+    userSockets[client.id] = client;
     
     db.exec(query, params, function(err, results) {
       if (err) { // If unexpected error then send 500
-        io.sockets.emit("notification", err);
+        //io.sockets.emit("notification", err);
+        userSockets[client.id].emit("notification", err);
       } else {
         userSockets[client.id].emit("notification", err);
       }
