@@ -11,7 +11,8 @@ var md5 = require('md5');
 app.use(express.static(__dirname + '/ionChatty/www/'));
 app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
-        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+        res.header("Access-Control-Allow-Headers", "X-Requested-With");
+        res.header("Access-Control-Allow-Headers", "Content-Type");
         res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
         next();
     });
@@ -23,7 +24,7 @@ http.listen(3333, function(){
   console.log('WebServer listening on *:3333');
 });
 
-var io = require('socket.io').listen(http);
+var io = require('socket.io').listen(http, {log:false, origins:'*:*'});
 
 io.on('connection', function(client){
   console.log('User Connected -> ' + client.id);
