@@ -24,7 +24,9 @@ http.listen(3333, function(){
   console.log('WebServer listening on *:3333');
 });
 
-var io = require('socket.io').listen(http, {log:false, origins:'*:*'});
+var io = require('socket.io').listen(http);
+
+io.set('transports', [ 'xhr-polling', 'jsonp-polling', 'htmlfile' ]);
 
 io.on('connection', function(client){
   console.log('User Connected -> ' + client.id);
