@@ -26,7 +26,7 @@ http.listen(3333, function(){
 
 var io = require('socket.io').listen(http);
 
-io.set('transports', [ 'xhr-polling', 'jsonp-polling', 'htmlfile' ]);
+io.set('transports', [ 'xhr-polling', 'jsonp-polling', 'htmlfile', 'websocket', 'flashsocket', 'xhr-multipart' ]);
 
 io.on('connection', function(client){
   console.log('User Connected -> ' + client.id);
