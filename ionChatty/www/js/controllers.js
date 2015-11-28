@@ -1,4 +1,4 @@
-app.controller('overviewCtrl',['$scope','$ionicModal','ioFactory','$ionicPopup',function($scope, $ionicModal,ioFactory,$ionicPopup){
+app.controller('overviewCtrl',['$scope','$ionicModal','ioFactory','$ionicPopup', '$state', '$ionicHistory',function($scope, $ionicModal,ioFactory,$ionicPopup, $state, $ionicHistory){
     $scope.username = '';
 
     $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -16,20 +16,7 @@ app.controller('overviewCtrl',['$scope','$ionicModal','ioFactory','$ionicPopup',
     });
 
     $scope.$on('login.notification', function () {
-      // if ($scope.isMe(socket.io.engine.id))
-      // {
-      // $scope.userId = socket.io.engine.id;
-      // console.log($scope.userId);
-        //console.log(socket.io.engine.id);
-
-        if (ioFactory.notif())
-        {
-          //$scope.login.hide();
-          $scope.users = ioFactory.users();
-          //$scope.showAlert('Login Success','Just ask us for virtual assistant');
-          $scope.$apply();
-        }
-        else
+        if (ioFactory.notif()==false)
         {
           $scope.showAlert('Login Failed','Username or password not match');
           $ionicModal.fromTemplateUrl('templates/login.html', {
@@ -40,6 +27,29 @@ app.controller('overviewCtrl',['$scope','$ionicModal','ioFactory','$ionicPopup',
             $scope.login = modal;
             $scope.login.show();
           });
+        }
+        else
+        {          
+          var user = ioFactory.users().filter(function(val) {
+              return val.Id === ioFactory.clientid();
+          });
+
+          if(user[0].role==='user')
+          {
+            var admin = ioFactory.users().filter(function(val) {
+                return val.role === 'admin';
+            });
+
+            $ionicHistory.nextViewOptions({
+              disableBack: true
+            });
+
+            $state.go("chat", { UserID: admin[0].Id});
+            $scope.$apply();
+          }
+
+          $scope.users = ioFactory.users();
+          $scope.$apply();
         }
       //}
     });
@@ -133,7 +143,15 @@ app.controller('overviewCtrl',['$scope','$ionicModal','ioFactory','$ionicPopup',
         data = alluser.filter(function (el) {
           return el.Id == userId
         });
-        return (data[0].role);
+
+        if (data[0].role==undefined)
+        {
+          return null;
+        }
+        else
+        {
+          return data[0].role;
+        }
     }
 }]);
 
@@ -144,7 +162,7 @@ app.controller('chatCtrl',['$scope','$stateParams','ioFactory','$ionicScrollDele
 
 
     $scope.$on('messages.update', function () {
-      $scope.messages = ioFactory.messages($scope.partnerId);
+      //$scope.messages = ioFactory.messages($scope.partnerId);
       setMessagesToRead();
       $ionicScrollDelegate.$getByHandle('content').scrollBottom(true);
       $scope.$apply();

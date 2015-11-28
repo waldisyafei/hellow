@@ -8,17 +8,16 @@ var userSockets = {};
 var db = require('./database.js');
 var md5 = require('md5');
 
-app.use(express.static(__dirname + '/ionChatty/www/'));
+//app.use(express.static(__dirname + '/ionChatty/www/'));
 app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        res.header("Access-Control-Allow-Headers", "Content-Type");
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
         res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
         next();
     });
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/ionChatty/www/index.html');
-});
+// app.get('/', function(req, res){
+//   res.sendFile(__dirname + '/ionChatty/www/index.html');
+// });
 
 http.listen(3333, function(){
   console.log('WebServer listening on *:3333');
@@ -31,9 +30,8 @@ io.on('connection', function(client){
 
   client.on("login", function(email, password){
     var user = {};
-    //user.Name = email;
-    user.Id = client.id;
-
+    user.Name = email;
+    
     var query = "select count(role)hitung, role, contact, name from users where email=? and password=?";
     var params = [email, md5(password)];
     
@@ -41,13 +39,22 @@ io.on('connection', function(client){
       if (results[0].hitung) { // If unexpected error then send 500
         user.role = results[0].role;
         user.contact = results[0].contact;
-        user.Name = results[0].name;
+        user.Id = client.id;
 
         userSockets[client.id] = client;
         users.push(user);
 
-        //userSockets[client.id].emit("login", true, users);
-        io.sockets.emit("login", true, users);
+        query = "select group_concat(CONCAT(id, '. ', name) separator '<br />') categories from categories where parentid is null";
+        db.exec(query, params, function(err, results) {
+          if (err) { // If unexpected error then send 500
+            //io.sockets.emit("notification", err);
+            userSockets[client.id].emit("login", false);
+          } else {
+            userSockets[client.id].emit("login", results[0].categories, users, client.id);
+          }
+        });
+
+        //userSockets[client.id].emit("login", true, users, client.id);
 
       } else {
         userSockets[client.id] = client;
@@ -77,20 +84,42 @@ io.on('connection', function(client){
   });
 
   client.on("send", function(fromUser, toUser, msg){
-    console.log('From -> ' + fromUser + ' To -> ' + toUser + ' Message: ' + msg);
+    // console.log('From -> ' + fromUser + ' To -> ' + toUser + ' Message: ' + msg);
 
-    var from = users.filter( function(user){return (user.Id==fromUser);});
-    var to = users.filter( function(user){return (user.Id==toUser);});
+    // var from = users.filter( function(user){return (user.Id==fromUser);});
+    // var to = users.filter( function(user){return (user.Id==toUser);});
 
-    var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
-    var now = new Date();
-    var params = ["messages", "messageBody", "senderId", "receiverId", "messageDate", msg, from[0].Name, to[0].Name, now];
+    // var query = "INSERT INTO ??(??,??,??,??) VALUES (?,?,?,?)";
+    // var now = new Date();
+    // var params = ["messages", "messageBody", "senderId", "receiverId", "messageDate", msg, from[0].Name, to[0].Name, now];
     
+    // db.exec(query, params, function(err, results) {
+    //   if (err) { // If unexpected error then send 500
+    //     userSockets[toUser].emit("incomming", fromUser , err);
+    //   } else {
+    //     userSockets[toUser].emit("incomming", fromUser , msg);
+    //   }
+    // });
+
+    var query = "";
+    var params = ""
+
+    if (msg==0)
+    {
+      msg=null;
+      query = "select group_concat(CONCAT(id, '. ', name) separator '<br />') categories from categories where parentid is "+ msg +"";
+    }
+    else
+    {
+      query = "select CONCAT(group_concat(CONCAT(id, '. ', name) separator '<br />'),'<br/>0. Menu Utama') categories from categories where parentid = ?";
+      params = [msg]; 
+    }
+
     db.exec(query, params, function(err, results) {
       if (err) { // If unexpected error then send 500
-        userSockets[toUser].emit("incomming", fromUser , err);
+        userSockets[fromUser].emit("incomming", toUser , err);
       } else {
-        userSockets[toUser].emit("incomming", fromUser , msg);
+        userSockets[fromUser].emit("incomming", toUser , results[0].categories);
       }
     });
   });

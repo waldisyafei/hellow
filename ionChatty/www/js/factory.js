@@ -2,6 +2,7 @@ app.service('ioFactory', function ($rootScope) {
   var Users = [];
   var messages = {};
   var notif = {};
+  var clientId = {};
 
   socket.on("update", function(online){
       Users = online;
@@ -13,9 +14,35 @@ app.service('ioFactory', function ($rootScope) {
       $rootScope.$broadcast('register.notification');
   });
 
-  socket.on("login", function(msg, user){
+  socket.on("login", function(msg, user, clientid){
+      var admin = user.filter(function(val) {
+          return val.role === 'admin';
+      });
+
+      msg = "Silahkan masukkan angka sesuai kebutuhan anda dibawah ini:<br/>" + msg;
+
+      var mess = {
+        "userId" : admin[0].Id,
+        "text": msg,
+        "isRead": true
+      };
+
+      var id = admin[0].Id;
+      if(messages[id] == undefined){
+        messages[id] = [];
+      }
+      messages[id].push(mess);
+
       notif = msg;
       Users = user;
+      clientId = clientid;
+
+      //console.log(Users);
+
+      //console.log(Users);
+      // socket.io.engine.id = Users.id;
+      // console.log(socket.io.engine.id);
+
       $rootScope.$broadcast('login.notification');
   });
 
@@ -25,6 +52,10 @@ app.service('ioFactory', function ($rootScope) {
         "text": message,
         "isRead": false
       };
+
+      if(messages[fromUser] == undefined){
+        messages[fromUser] = [];
+      }
 
       messages[fromUser].push(mess);
       $rootScope.$broadcast('messages.update');
@@ -53,6 +84,9 @@ app.service('ioFactory', function ($rootScope) {
       },
       notif: function(){
         return notif;
+      },
+      clientid: function(){
+        return clientId;
       },
       send: function(partner, message){
         if(messages[partner] == undefined){
