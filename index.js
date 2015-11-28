@@ -8,16 +8,16 @@ var userSockets = {};
 var db = require('./database.js');
 var md5 = require('md5');
 
-//app.use(express.static(__dirname + '/ionChatty/www/'));
+app.use(express.static(__dirname + '/ionChatty/www/'));
 app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
         res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
         next();
     });
-// app.get('/', function(req, res){
-//   res.sendFile(__dirname + '/ionChatty/www/index.html');
-// });
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/ionChatty/www/index.html');
+});
 
 http.listen(3333, function(){
   console.log('WebServer listening on *:3333');
