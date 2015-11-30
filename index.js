@@ -25,8 +25,12 @@ http.listen(3333, function(){
 });
 
 var io = require('socket.io').listen(http);
-
 io.set('transports', [ 'xhr-polling', 'jsonp-polling', 'htmlfile', 'websocket', 'flashsocket', 'xhr-multipart', 'polling' ]);
+
+function IsNumeric(input){
+    var RE = /^-{0,1}\d*\.{0,1}\d+$/;
+    return (RE.test(input));
+}
 
 io.on('connection', function(client){
   console.log('User Connected -> ' + client.id);
@@ -47,13 +51,19 @@ io.on('connection', function(client){
         userSockets[client.id] = client;
         users.push(user);
 
-        query = "select group_concat(CONCAT(id, '. ', name) separator '<br />') categories from categories where parentid is null";
+        query = "insert into loginhistory(email, socketid, date) values(?,?,NOW())";
+        params = [email, client.id];
         db.exec(query, params, function(err, results) {
-          if (err) { // If unexpected error then send 500
-            //io.sockets.emit("notification", err);
-            userSockets[client.id].emit("login", false);
-          } else {
-            userSockets[client.id].emit("login", results[0].categories, users, client.id);
+          if (!err) { // If unexpected error then send 500
+            query = "select group_concat(CONCAT(id, '. ', name) separator '<br />') categories from categories where parentid is null";
+            db.exec(query, params, function(err, results) {
+              if (err) { // If unexpected error then send 500
+                //io.sockets.emit("notification", err);
+                userSockets[client.id].emit("login", false);
+              } else {
+                userSockets[client.id].emit("login", results[0].categories, users, client.id);
+              }
+            });
           }
         });
 
@@ -105,25 +115,98 @@ io.on('connection', function(client){
     // });
 
     var query = "";
-    var params = ""
+    var params = "";
+    var chat = 0;
 
-    if (msg==0)
-    {
-      msg=null;
-      query = "select group_concat(CONCAT(id, '. ', name) separator '<br />') categories from categories where parentid is "+ msg +"";
-    }
-    else
-    {
-      query = "select CONCAT(group_concat(CONCAT(id, '. ', name) separator '<br />'),'<br/>0. Menu Utama') categories from categories where parentid = ?";
-      params = [msg]; 
-    }
-
+    query = "select chat from loginhistory a where a.socketid=?";
+    params = [fromUser];
     db.exec(query, params, function(err, results) {
-      if (err) { // If unexpected error then send 500
-        userSockets[fromUser].emit("incomming", toUser , err);
-      } else {
-        userSockets[fromUser].emit("incomming", toUser , results[0].categories);
+      chat = results[0].chat;
+      if(chat==0)
+      {
+        if (msg==0)
+        {
+          msg=null;
+          query = "select group_concat(CONCAT(id, '. ', name) separator '<br />') categories from categories where parentid is "+ msg +"";
+        }
+        else
+        {
+          query = "select CASE WHEN b.id is null then CONCAT(group_concat(CONCAT(a.id, '. ', a.name) separator '<br />'),'<br/>0. Menu Utama') else a.name end categories, b.id from categories a left join (select parent.id from categories parent left join categories child on parent.id = child.parentid where child.id is null)b on a.id=b.id where a.parentid = ?";
+          params = [msg];
+        }
+
+        db.exec(query, params, function(err, results) {
+          if (err) { // If unexpected error then send 500
+            userSockets[fromUser].emit("incomming", toUser , err);
+          } else {
+            if(results[0].id!=null)
+            {
+              query = "update loginhistory set chat = 1 where socketid=?";
+              params = [fromUser];
+              db.exec(query, params, function(err, results) {
+                
+              });
+            }
+            userSockets[fromUser].emit("incomming", toUser , results[0].categories);
+          }
+        });
       }
+      else
+      {
+        if (IsNumeric(msg))
+        {
+          query = "update loginhistory set chat = 0 where socketid=?";
+          params = [fromUser];
+          db.exec(query, params, function(err, results) {
+            if (msg==0)
+            {
+              msg=null;
+              query = "select group_concat(CONCAT(id, '. ', name) separator '<br />') categories from categories where parentid is "+ msg +"";
+            }
+            else
+            {
+              query = "select CASE WHEN b.id is null then CONCAT(group_concat(CONCAT(a.id, '. ', a.name) separator '<br />'),'<br/>0. Menu Utama') else a.name end categories, b.id from categories a left join (select parent.id from categories parent left join categories child on parent.id = child.parentid where child.id is null)b on a.id=b.id where a.parentid = ?";
+              params = [msg];
+            }
+
+            db.exec(query, params, function(err, results) {
+              if (err) { // If unexpected error then send 500
+                userSockets[fromUser].emit("incomming", toUser , err);
+              } else {
+                if(results[0].id!=null)
+                {
+                  query = "update loginhistory set chat = 1 where socketid=?";
+                  params = [fromUser];
+                  db.exec(query, params, function(err, results) {
+                    
+                  });
+                }
+                userSockets[fromUser].emit("incomming", toUser , results[0].categories);
+              }
+            });
+          });
+        }
+        else
+        {
+          var from = users.filter( function(user){return (user.Id==fromUser);});
+          var to = users.filter( function(user){return (user.Id==toUser);});
+
+          var from = from[0].Name
+          var to = to[0].Name
+
+          query = "insert into messages (`messageBody`, `senderId`, `receiverId`, `messageDate`) values(?,?,?,NOW())";
+          params = [msg, from, to];
+          db.exec(query, params, function(err, results) {
+            query = "update loginhistory set chat = 0 where socketid=?";
+            params = [fromUser];
+            db.exec(query, params, function(err, results) {
+              
+            });
+            userSockets[fromUser].emit("incomming", toUser , "Terima kasih, Permintaan anda akan segera kami proses. Selanjutnya akan kami kabari dalam beberapa menit");
+          });
+        }   
+      }
+      
     });
   });
 

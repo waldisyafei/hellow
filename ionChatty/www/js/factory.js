@@ -3,6 +3,7 @@ app.service('ioFactory', function ($rootScope) {
   var messages = {};
   var notif = {};
   var clientId = {};
+  var email={};
 
   socket.on("update", function(online){
       Users = online;

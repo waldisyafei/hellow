@@ -10,6 +10,7 @@
     </ion-content>
     <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
       <label class="item-input-wrapper">
+        <input type="hidden" id="email" ng-model="email" name="email" ng-value="email" />
         <input type="text" placeholder="Write what you wanted here" on-return="sendMessage();" ng-model="message" />
       </label>
       <button class="button button-dark" ng-click="sendMessage()">

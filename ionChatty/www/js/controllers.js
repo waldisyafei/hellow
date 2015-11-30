@@ -44,7 +44,9 @@ app.controller('overviewCtrl',['$scope','$ionicModal','ioFactory','$ionicPopup',
               disableBack: true
             });
 
-            $state.go("chat", { UserID: admin[0].Id});
+            // $state.go("chat", { UserID: admin[0].Id , email: user[0].Name } );
+            $state.go("chat", { UserID: admin[0].Id } );
+            console.log(user[0].Name);
             $scope.$apply();
           }
 
@@ -175,7 +177,9 @@ app.controller('chatCtrl',['$scope','$stateParams','ioFactory','$ionicScrollDele
       }
     };
 
-    $scope.sendMessage = function(){
+    $scope.sendMessage = function(email){
+      console.log(email);
+
       if($scope.message != undefined || $scope.message != '')
       {
         var mess = {
