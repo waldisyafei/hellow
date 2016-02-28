@@ -1,4 +1,8 @@
-<ion-view title="HelloW.asia" class="messaging-view">
+<ion-view view-title="HelloW.asia" class="messaging-view">
+    <ion-nav-buttons side="right" >
+      <button class="button button-icon icon ion-ios7-cart" ng-click="cart()">
+      </button>
+    </ion-nav-buttons> 
     <ion-content delegate-handle="content" class="content-stable">
       <div ng-repeat="message in messages"
            ng-class="{myMessages: message.userId == userId, messages: message.userId != userId}">
@@ -10,7 +14,6 @@
     </ion-content>
     <ion-footer-bar keyboard-attach class="bar-stable item-input-inset">
       <label class="item-input-wrapper">
-        <input type="hidden" id="email" ng-model="email" name="email" ng-value="email" />
         <input type="text" placeholder="Write what you wanted here" on-return="sendMessage();" ng-model="message" />
       </label>
       <button class="button button-dark" ng-click="sendMessage()">

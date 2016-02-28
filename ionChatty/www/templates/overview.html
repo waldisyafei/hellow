@@ -1,14 +1,14 @@
-<ion-view view-title="HelloW.asia">
+<!-- <ion-view view-title="HelloW.asia">
   <ion-content>
     <ion-list>
-      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles(userid(),users)=='admin' && user.role=='user'">
+      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles()=='admin' && user.role=='user'">
         <div>
           {{user.Name}} ({{user.contact}})
           <div ng-if="isMe(user.Id)">(me)</div>
           <span ng-if="!isMe(user.Id) && getUndreadedMessages(user.Id) > 0" class="badge badge-positive">{{ getUndreadedMessages(user.Id) }}</span>
         </div>
       </ion-item>
-      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles(userid(),users)=='user' && user.role=='admin'">
+      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" ng-if="roles()=='user' && user.role=='admin'">
         <div>
           {{user.Name}} ({{user.contact}})
           <div ng-if="isMe(user.Id)">(me)</div>
@@ -16,5 +16,37 @@
         </div>
       </ion-item>
     </ion-list>
+  </ion-content>
+</ion-view>
+ -->
+<!-- <ion-nav-bar class="bar-dark">
+  <ion-nav-back-button>
+  </ion-nav-back-button>
+  <ion-nav-buttons side="right">
+      <button class="button button-clear button-positive" ng-click="reset()">
+          Refresh
+      </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button
+        class="button button-icon icon ion-ios7-cart"
+        ng-click="requestClearNotifications()">
+    </button>        
+  </ion-nav-buttons>  
+</ion-nav-bar> -->
+<ion-view view-title="HelloW.asia">
+  <ion-content>
+    <ion-list can-swipe="true">
+      <ion-item href="#chat/{{user.Id}}" ng-repeat="user in users" && ng-if="user.message==1">
+        <ion-option-button class="button-light icon ion-compose" ui-sref="order({UserID: user.Id})"></ion-option-button>
+        <ion-option-button class="button-light icon ion-email" ui-sref="orderdetail({UserID: user.Id})"></ion-option-button>
+        <ion-option-button class="button-assertive icon ion-trash-a"></ion-option-button>
+        <div>
+          {{user.Name}} ({{user.contact}})
+          <div ng-if="isMe(user.Id)">(me)</div>
+          <span ng-if="!isMe(user.Id) && getUndreadedMessages(user.Id) > 0" class="badge badge-positive">{{ getUndreadedMessages(user.Id) }}</span>
+        </div>
+    </ion-list>
+      </ion-item>
   </ion-content>
 </ion-view>

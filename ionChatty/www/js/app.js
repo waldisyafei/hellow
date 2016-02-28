@@ -1,9 +1,10 @@
 var app = angular.module('app', ['ionic'])
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
-    // if(window.cordova && window.cordova.plugins.Keyboard) {
-    //   cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    // }
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      cordova.plugins.Keyboard.disableScroll(true);
+    }
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
@@ -31,6 +32,21 @@ app.config(function($stateProvider,$urlRouterProvider) {
   .state('chat', {
     url: '/chat/:UserID',
     controller: 'chatCtrl',
-    templateUrl: 'templates/chat.html'
+    templateUrl: 'templates/chat.html',
+  })
+  .state('order', {
+    url: '/order/:UserID',
+    controller: 'orderCtrl',
+    templateUrl: 'templates/order.html',
+  })
+  .state('orderdetail', {
+    url: '/orderdetail/:UserID',
+    controller: 'orderdetailCtrl',
+    templateUrl: 'templates/orderdetail.html',
+  })
+  .state('changestatus', {
+    url: '/changestatus/:id',
+    controller: 'changestatusCtrl',
+    templateUrl: 'templates/changestatus.html',
   });
 });

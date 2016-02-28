@@ -1,9 +1,13 @@
+var baseUrl = 'http://localhost:3333/';
+
 app.service('ioFactory', function ($rootScope) {
   var Users = [];
   var messages = {};
   var notif = {};
   var clientId = {};
   var email={};
+  var orders = {};
+  var status = [];
 
   socket.on("update", function(online){
       Users = online;
@@ -13,6 +17,27 @@ app.service('ioFactory', function ($rootScope) {
   socket.on("notification", function(msg){
       notif = msg;
       $rootScope.$broadcast('register.notification');
+  });
+
+  socket.on("ordernotif", function(msg){
+      notif = msg;
+      $rootScope.$broadcast('order.notification');
+  });
+
+  socket.on("statusnotif", function(msg){
+      notif = msg;
+      $rootScope.$broadcast('status.notification');
+  });
+
+  socket.on("listorder", function(order,id){
+    // if(orders[id] == undefined){
+      orders[id] = [];
+    // }
+    orders[id].push(order);
+  });
+
+  socket.on("liststatus", function(stat){
+    status = stat;
   });
 
   socket.on("login", function(msg, user, clientid){
@@ -37,12 +62,6 @@ app.service('ioFactory', function ($rootScope) {
       notif = msg;
       Users = user;
       clientId = clientid;
-
-      //console.log(Users);
-
-      //console.log(Users);
-      // socket.io.engine.id = Users.id;
-      // console.log(socket.io.engine.id);
 
       $rootScope.$broadcast('login.notification');
   });
@@ -72,16 +91,50 @@ app.service('ioFactory', function ($rootScope) {
       login: function(username,password){
         socket.emit("login", username, password);
       },
+      loging: function(username,password){
+       var deferred = $rootScope.defer();
+
+        var url = baseUrl + 'login';
+        var postData = { name: name, password: password };
+
+        $http.post(url, postData).success(function(response) {
+          if(response.success && (response.success == true || response.success == "true")) {
+            user = { name: response.name, id: response.id };
+            window.localStorage.setItem('user', JSON.stringify(user));
+            return deferred.resolve(response);
+          } else {
+            return deferred.resolve('No user found');
+          }
+        }).error(function(error) {
+          //Fail our promise.
+          deferred.reject(error);
+        })
+
+        return deferred.promise;
+      },
+      order: function(partnerId,items,amount, remark){
+        socket.emit("order", socket.io.engine.id, partnerId, items, amount, remark);
+      },
       register: function(email,password,name,contact){
         socket.emit("register", email, password, name, contact);
       },
       messages: function(partnerId){
-        console.log(partnerId);
-
         if(messages[partnerId] == undefined){
           messages[partnerId] = [];
         }
         return messages[partnerId];
+      },
+      orders: function(partnerId){
+        if(orders[partnerId] == undefined){
+          orders[partnerId] = [];
+        }
+        return orders[partnerId];
+      },
+      status: function(){
+        return status;
+      },
+      updatestatus: function(orderid, fromUser, remark){
+        socket.emit("updatestatus", orderid, fromUser, remark);
       },
       notif: function(){
         return notif;
@@ -89,12 +142,57 @@ app.service('ioFactory', function ($rootScope) {
       clientid: function(){
         return clientId;
       },
-      send: function(partner, message){
+      send: function(partner, message, role){
         if(messages[partner] == undefined){
           messages[partner] = [];
         }
         messages[partner].push(message);
-        socket.emit("send", socket.io.engine.id, partner, message.text);
+        socket.emit("send", socket.io.engine.id, partner, message.text, role);
       }
+  };
+});
+
+app.service('Auth', function ($q, $http) {
+  var user = null;
+
+  try {
+    user = JSON.parse(window.localStorage.getItem('user'));
+  } catch(ex) { /* Silently fail, no user */ }
+
+  var login = function login(name, password) {
+    var deferred = $q.defer();
+
+    var url = baseUrl + 'login';
+    var postData = { name: name, password: password };
+
+    $http.post(url, postData).success(function(response) {
+      if(response.success && (response.success == true || response.success == "true")) {
+        user = { name: response.name, id: response.id };
+        window.localStorage.setItem('user', JSON.stringify(user));
+        return deferred.resolve(response);
+      } else {
+        return deferred.resolve('No user found');
+      }
+    }).error(function(error) {
+      //Fail our promise.
+      deferred.reject(error);
+    })
+
+    return deferred.promise;
+  }
+
+  var currentUser = function currentUser() {
+    return user;
+  }
+
+  var logout = function logout() {
+    user = null;
+    window.localStorage.removeItem('user');
+  }
+
+  return {
+    login: login,
+    logout: logout,
+    currentUser: currentUser
   };
 });

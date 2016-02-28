@@ -1,0 +1,71 @@
+<ion-view view-title="Order" cache-view="false">
+  <!-- <ion-nav-buttons side="right">
+    <a class="button button-icon icon ion-plus" href="#/app/create"></a>
+  </ion-nav-buttons> -->
+  <ion-content class="has-header">
+    <ion-list ng-if="roles()=='user'">
+        <ion-item ng-repeat="order in orders | orderBy:'date':true" class="item-icon-right">
+            <div class="row">
+                <div class="col">
+                    <h2><strong>{{order.items}}</strong></h2>
+                    <p>
+                        <strong>{{order.remark}}</strong>
+                    </p>
+                    <p>
+                        <!-- <img src="img/stars/stars_{{item.avg_rating}}.png" class="rating">
+                        <i class="{{item.parking_type}} ion-record key"></i>&nbsp; -->
+
+                        <small>{{order.date | date: 'dd/MM/yyyy HH:MM' }}</small>
+                    </p>
+                    <!-- <p class="info">
+                        <span class="ion-clock">{{item.transfer_time_int}}
+                            <span ng-show="item.transfer_time_int != 'N/A'">mins</span>
+                        </span>
+                        <span class="ion-ios7-loop-strong" ng-show="item.transfer_time_int > 0">{{item.transfer_freq}}</span>
+                    </p> -->
+                </div>
+                <div class="col text-left">
+                    <strong>{{order.name}}</strong>
+                </div>
+                <div class="col price text-left">
+                    <!-- <div class="loading logo_container" rn-lazy-background="'{{item.logoImage}}'" rn-lazy-loading-class="loading" rn-lazy-loaded-class="loaded"></div> -->
+                    <strong>{{order.amount | currency:"Rp":0}}</strong>
+                </div>
+            </div>
+        </ion-item>
+    </ion-list>
+
+    <ion-list ng-if="roles()=='admin'">
+        <ion-item href="#changestatus/{{order.id}}" ng-repeat="order in orders | orderBy:'date':true" class="item-icon-right">
+            <div class="row">
+                <div class="col">
+                    <h2><strong>{{order.items}}</strong></h2>
+                    <p>
+                        <strong>{{order.remark}}</strong>
+                    </p>
+                    <p>
+                        <!-- <img src="img/stars/stars_{{item.avg_rating}}.png" class="rating">
+                        <i class="{{item.parking_type}} ion-record key"></i>&nbsp; -->
+
+                        <small>{{order.date | date: 'dd/MM/yyyy HH:MM' }}</small>
+                    </p>
+                    <!-- <p class="info">
+                        <span class="ion-clock">{{item.transfer_time_int}}
+                            <span ng-show="item.transfer_time_int != 'N/A'">mins</span>
+                        </span>
+                        <span class="ion-ios7-loop-strong" ng-show="item.transfer_time_int > 0">{{item.transfer_freq}}</span>
+                    </p> -->
+                </div>
+                <div class="col text-left">
+                    <strong>{{order.name}}</strong>
+                </div>
+                <div class="col price text-left">
+                    <!-- <div class="loading logo_container" rn-lazy-background="'{{item.logoImage}}'" rn-lazy-loading-class="loading" rn-lazy-loaded-class="loaded"></div> -->
+                    <strong>{{order.amount | currency:"Rp":0}}</strong>
+                </div>
+            </div>
+        </ion-item>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

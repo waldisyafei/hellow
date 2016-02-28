@@ -1,0 +1,36 @@
+<ion-view view-title="Change Status Order">
+  <ion-content>
+    <form name="changestatus" novalidate="" ng-submit="savestatus(changestatus,input)">
+      <!-- <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">Item</span>
+          <input type="text" name="items" ng-model="input.items" required>
+        </label>
+      </div> -->
+
+      <div class="list list-inset">
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Change status
+          </div>
+          <select ng-model="input.status">
+            <option ng-repeat="stat in status" ng-value="{{stat.statusid}}">({{stat.name}})</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="list list-inset">
+        <label class="item item-input">
+          <span class="input-label">Remark</span>
+          <input type="text" name="remark" ng-model="input.remark">
+        </label>
+      </div>
+      <div class="padding">
+        <p ng-show="changestatus.items.$error.required && changestatus.$submitted">* items is required</p>
+      </div>
+      <div class="padding">
+        <button class="button button-block button-positive" type="submit">Save Status</button>
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

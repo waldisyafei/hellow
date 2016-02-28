@@ -24,14 +24,31 @@
     <script src="js/factory.js"></script>
   </head>
   <body ng-app="app">
-    <ion-nav-bar class="bar-dark">
-      <ion-nav-back-button>
+  
+<!--   <ion-nav-bar class="bar-dark">
+  <ion-nav-back-button>
   </ion-nav-back-button>
-    </ion-nav-bar>
-    <ion-nav-view></ion-nav-view>
+  <ion-nav-buttons side="right">
+      <button class="button button-clear button-positive" ng-click="reset()">
+          Refresh
+      </button>
+  </ion-nav-buttons>
+  <ion-nav-buttons side="right">
+    <button class="button button-icon icon ion-ios7-cart" ng-click="topbar()" type="button">
+    </button>        
+  </ion-nav-buttons>  
+</ion-nav-bar> -->
+
+<ion-nav-bar class="bar-positive nav-title-slide-ios7 mynavbar" align-title="center">
+  <ion-nav-back-button class="button-icon ion-arrow-left-c">
+  </ion-nav-back-button>  
+</ion-nav-bar>
+
+  <ion-nav-view>
+  </ion-nav-view>
   <script>
-      //var socket =  io.connect("infocomputer.org:3333");
       var socket =  io.connect("http://infocomputer.org:3333");
+      // var socket =  io.connect("http://infocomputer.org:3333");
           // socket.on('data', function (data) {
           //     console.log(data);
           // });
