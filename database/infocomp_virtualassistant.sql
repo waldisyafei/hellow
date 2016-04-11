@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Feb 28, 2016 at 11:47 PM
+-- Generation Time: Apr 11, 2016 at 01:01 PM
 -- Server version: 5.5.24-log
 -- PHP Version: 5.4.3
 
@@ -923,7 +923,20 @@ INSERT INTO `loginhistory` (`email`, `socketid`, `date`, `chat`) VALUES
 ('waldi.syafei@yahoo.co.id', '5k218Yj_hcHODOfhAAAG', '2015-12-20 12:31:48', 0),
 ('waldi.syafei@gmail.com', 's543vuWgaVl5MkLUAAAC', '2015-12-20 12:36:49', 0),
 ('waldi.syafei@yahoo.co.id', '5bjNzA9OuULDCbKVAAAD', '2015-12-20 12:36:51', 0),
-('waldi.syafei@gmail.com', 'cpnjuDEU9anJSQ32AAAA', '2016-01-12 01:38:27', 0);
+('waldi.syafei@gmail.com', 'cpnjuDEU9anJSQ32AAAA', '2016-01-12 01:38:27', 0),
+('waldi.syafei@gmail.com', 'H8WZLGNJnI2WLRgEAAAB', '2016-02-29 05:38:08', 0),
+('waldi.syafei@yahoo.co.id', 'xGaL1rqHTCjH4fmuAAAC', '2016-02-29 05:38:22', 0),
+('waldi.syafei@gmail.com', 'VC7slmd7kp7RKrOXAAAA', '2016-03-17 23:16:12', 0),
+('waldi.syafei@yahoo.co.id', 'HiyQjQorZg487gr5AAAB', '2016-03-17 23:16:31', 0),
+('waldi.syafei@yahoo.co.id', 'GzBibUODVX2614uVAAAB', '2016-04-11 12:05:16', 0),
+('waldi.syafei@yahoo.co.id', 'hl-I_WuNEadBcTKIAAAD', '2016-04-11 12:06:38', 0),
+('waldi.syafei@infocomputer.org', 'BqAbK7dmMpkIQsVWAAAF', '2016-04-11 12:49:57', 0),
+('waldi.syafei@infocomputer.org', 'E0q7sBIQ3o0lM7QkAAAG', '2016-04-11 12:50:51', 0),
+('waldi.syafei@infocomputer.org', 'AHZmXXSThQehoFJeAAAB', '2016-04-11 12:51:51', 0),
+('waldi.syafei@gmail.com', 'QNYxZzTl1HNYjhinAAAC', '2016-04-11 12:53:36', 0),
+('waldi.syafei@infocomputer.org', 'vo8EoYW0-0V3Ho10AAAD', '2016-04-11 12:53:47', 0),
+('waldi.syafei@gmail.com', 'gGdxIfvvOZYgSgxrAAAC', '2016-04-11 12:58:31', 0),
+('waldi.syafei@yahoo.co.id', 'slnetoW419USUPOdAAAD', '2016-04-11 12:58:37', 0);
 
 -- --------------------------------------------------------
 
@@ -939,7 +952,7 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `receiverId` varchar(200) NOT NULL,
   `messageDate` datetime NOT NULL,
   PRIMARY KEY (`messageId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=168 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=170 ;
 
 --
 -- Dumping data for table `messages`
@@ -1112,7 +1125,9 @@ INSERT INTO `messages` (`messageId`, `messageBody`, `senderId`, `receiverId`, `m
 (164, 'write', 'waldi syafei', 'Hellow1', '2015-12-20 10:55:17'),
 (165, 'what', 'waldi syafei', 'Hellow1', '2015-12-20 10:57:04'),
 (166, 'tes', 'waldi syafei', 'Hellow1', '2015-12-20 12:31:56'),
-(167, 'tes', 'waldi syafei', 'Hellow1', '2015-12-20 12:37:00');
+(167, 'tes', 'waldi syafei', 'Hellow1', '2015-12-20 12:37:00'),
+(168, 'jakarta, dll, dll, dll, dll', 'waldi syafei', 'Hellow1', '2016-02-29 05:39:30'),
+(169, 'tes aja', 'waldi syafei', 'Hellow1', '2016-04-11 12:58:58');
 
 -- --------------------------------------------------------
 
@@ -1131,7 +1146,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `date` datetime NOT NULL,
   `status` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=41 ;
 
 --
 -- Dumping data for table `orders`
@@ -1144,7 +1159,9 @@ INSERT INTO `orders` (`id`, `email`, `categoriesid`, `items`, `amount`, `remark`
 (35, 'waldi.syafei@yahoo.co.id', 1101, 'woi', 0, 'mmm', '2015-12-20 10:57:12', 100),
 (36, 'waldi.syafei@yahoo.co.id', 1101, 'woi', 0, 'mmm', '2015-12-20 10:57:13', 100),
 (37, 'waldi.syafei@yahoo.co.id', 1101, 'ada deh', 0, 'remarks nya adalah bla bla bal sampai mana saja boleh dan sampai sana saja juga boleh boleh aja bebas yaa hohohoho  fsdfs daf sdf sdfsadf sdaf as fsad fsda fads', '2015-12-20 12:32:39', 100),
-(38, 'waldi.syafei@yahoo.co.id', 1101, 'tes', 0, 'hehehe', '2015-12-20 12:37:20', 100);
+(38, 'waldi.syafei@yahoo.co.id', 1101, 'tes', 0, 'hehehe', '2015-12-20 12:37:20', 100),
+(39, 'waldi.syafei@yahoo.co.id', 1101, 'TIket Pesawat Garuda Indonesia 12345', 100000, 'Tes Adalah', '2016-02-29 05:40:58', 100),
+(40, 'waldi.syafei@yahoo.co.id', 1101, 'Ada deh', 1000, 'Tes Adalah', '2016-04-11 12:59:40', 2);
 
 -- --------------------------------------------------------
 
@@ -1190,16 +1207,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `role` varchar(50) NOT NULL,
   PRIMARY KEY (`userId`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`userId`, `password`, `photo`, `email`, `mood`, `contact`, `name`, `dateCreated`, `saldo`, `role`) VALUES
-(4, '5a26599417b0acd86a31e1d50056ddbc', NULL, 'waldi.syafei@gmail.com', NULL, '081311485252', 'Hellow1', '2015-11-23 01:15:50', 0, 'admin'),
-(5, '5a26599417b0acd86a31e1d50056ddbc', NULL, 'waldi.syafei@yahoo.co.id', NULL, '081311485252', 'waldi syafei', '2015-11-23 01:36:05', 0, 'user'),
-(6, '5a26599417b0acd86a31e1d50056ddbc', NULL, 'waldi.syafei@infocomputer.org', NULL, '08123432523', 'waldisss', '2015-11-28 13:22:40', 0, 'user');
+(4, '9bd1369e5343cd679142bad3dfb66ca0', NULL, 'waldi.syafei@gmail.com', NULL, '081311485252', 'Hellow1', '2015-11-23 01:15:50', 0, 'admin'),
+(5, '9bd1369e5343cd679142bad3dfb66ca0', NULL, 'waldi.syafei@yahoo.co.id', NULL, '081311485252', 'waldi syafei', '2015-11-23 01:36:05', 0, 'user'),
+(9, '9bd1369e5343cd679142bad3dfb66ca0', NULL, 'waldi.syafei@infocomputer.org', NULL, '081311485251', 'waldi syafei', '2016-04-11 12:49:18', 0, 'user');
 
 --
 -- Constraints for dumped tables
