@@ -2,9 +2,9 @@ var mysql = require('mysql');
 
 var pool = mysql.createPool({
 	host: 'localhost',
-	user: 'infocomp_virtual',
-	password: 'wajdg@123',
-	database: 'infocomp_virtualassistant',
+	user: '',
+	password: '',
+	database: '',
 	connectionLimit: 500,
 	supportBigNumbers: true,
 	multipleStatements: true
